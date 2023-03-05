@@ -44,6 +44,42 @@
     - Add support for multiple currencies and languages
     - Implement a budgeting feature to track spending and saving goals
 
+# Models
+
+- The first step will be setting up the models for the bills and payments.
+
+- We will need to think about what attributes should be included, what should be the keys, etc.
+
+- This is also where we will be connecting to MongoDB and setting up the database for the first time.
+
+- Just for now, we will use a basic setup with the following collections inside the databse:
+
+1. Users Collection:
+
+   - \_id (unique identifier)
+   - name (user's full name)
+   - email (user's email address)
+   - password (encrypted password)
+
+2. Bills Collection:
+
+   - \_id (unique identifier)
+   - userId (the id of the user who owns the bill)
+   - name (name of the bill)
+   - amount (the amount owed)
+   - dueDate (the date the bill is due)
+   - category (the type of bill, e.g. rent, utilities, etc.)
+   - reminders (an array of dates when the user wants to be reminded about the bill)
+
+3. Payments Collection:
+   - \_id (unique identifier)
+   - userId (the id of the user who made the payment)
+   - billId (the id of the bill that the payment was made for)
+   - amount (the amount of the payment)
+   - date (the date the payment was made)
+   - paymentMethod (the method of payment, e.g. credit card, bank transfer, etc.)
+   - receipt (a file or URL linking to the payment receipt)
+
 # Pages
 
 ## Homepage
