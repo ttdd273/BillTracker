@@ -8,6 +8,42 @@
 - The view displays the data
 - The model describes the data and connects to the database
 
+# Sprints
+
+## Sprint 1: Basic Functionality
+
+    - Set up the project and create a basic layout
+    - Create a user registration and login system
+    - Allow users to add, edit, and delete bills
+    - Allow users to view a list of their bills
+
+## Sprint 2: Payment Tracking
+
+    - Allow users to add, edit, and delete payments
+    - Create a page to track payments for each bill
+    - Allow users to view a list of their payments
+
+## Sprint 3: Advanced Functionality
+
+    - Allow users to set reminders for bill due dates
+    - Create a dashboard to display a summary of bills and payments
+    - Add functionality to sort and filter bills and payments
+    - Allow users to upload and store receipts for payments
+
+## Sprint 4: User Experience Improvements
+
+    - Implement a responsive design for mobile devices
+    - Add error handling and form validation
+    - Implement password reset functionality
+    - Improve the UI/UX design to enhance user experience
+
+## Sprint 5: Additional Features
+
+    - Implement an analytics dashboard to display insights and trends
+    - Allow users to share bill and payment information with others
+    - Add support for multiple currencies and languages
+    - Implement a budgeting feature to track spending and saving goals
+
 # Pages
 
 ## Homepage
