@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+// trying out the pull request feature
+
 console.log(
   'This script populates some test users, payments, and bills to your database. Specified database as argument - e.g.: node populatedb "mongodb+srv://cooluser:coolpassword@cluster0.lz91hw2.mongodb.net/local_library?retryWrites=true&w=majority"'
 );
