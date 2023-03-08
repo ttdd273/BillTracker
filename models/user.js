@@ -28,4 +28,4 @@ UserSchema.virtual("url").get(function () {
   return `/${this._id}`;
 });
 
-module.exports = User;
+module.exports = mongoose.model("User", UserSchema);

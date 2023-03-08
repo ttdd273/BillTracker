@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 
 // models are created using mongoose.model()
 // define schema
-const Schema = mongoose.model();
+const Schema = mongoose.Schema;
 
 // reminders can be an array of dates of when the user wants to be reminded
 // but for now we won't include it
 
 const BillSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User" },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   name: { type: String, required: true, maxLength: 1000 },
   amount: { type: Number, min: [0, "Amount cannot be negative"] },
   // the ref property tells the scame which model can be assigned to this field
@@ -24,11 +24,11 @@ const BillSchema = new Schema({
       "Clothing",
       "Healthcare",
       "Insurance",
-      "Household Supplie",
-      "Persona",
-      "Deb",
-      "Retiremen",
-      "Educatio",
+      "Household Supplies",
+      "Personal Spending",
+      "Debt",
+      "Retirement",
+      "Education",
       "Savings",
       "Gift",
       "Entertainment",
