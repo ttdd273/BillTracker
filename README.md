@@ -82,6 +82,8 @@
 
 # Pages
 
+- Now that we've got all the data loaded in, we will try to list out all the bills and payments first, and possibly add the functionality to create and delete bills and payments, since these are all things already covered.
+
 ## Homepage
 
 - Displays an overview of the user's bills and payments
@@ -120,13 +122,16 @@
 
 # Routes
 
+- So for the routes, we need to add the different routes and controllers
+- However, an additional step is in the `app.js` file, we need to add the router middleware information.
+
 ## /home
 
 ## /login
 
 ## /register
 
-## dashboard
+## /dashboard
 
 ## /bills
 
@@ -136,4 +141,4 @@
 
 ## /payments/:id
 
-## / settings
+## /settings
