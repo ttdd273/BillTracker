@@ -3,3 +3,11 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  //- The !{} syntax is called an unescaped interpolation or unescaped variable.
+  if error
+    p Sorry we ran into an error: !{error}
+  else
+    ul
+      li #[strong Bills:] !{data.bill_count}
+      li #[strong Payments:] !{data.payment_count}
