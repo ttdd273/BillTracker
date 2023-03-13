@@ -23,7 +23,7 @@ exports.index = function (req, res, next) {
 };
 
 exports.payment_create_get = (req, res) => {
-  res.send("payment create get");
+  res.render("payment_form", { title: "Create Payment" });
 };
 
 exports.payment_create_post = (req, res) => {

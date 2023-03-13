@@ -37,7 +37,7 @@ exports.index = function (req, res, next) {
 };
 
 exports.bill_create_get = (req, res) => {
-  res.send("bill create get");
+  res.render("bill_form", { title: "Create Bill" });
 };
 
 exports.bill_create_post = (req, res) => {
