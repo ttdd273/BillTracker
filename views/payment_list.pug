@@ -1,4 +1,13 @@
-extends layout
+extends layout 
 
-block content 
+block content
   h1= title
+
+  ul
+    each payment in payment_list
+      li 
+        a(href=payment.url) Payment 
+        | of ($#{payment.amount}) for #{payment.billId.name} by #{payment.userId.first_name} #{payment.userId.last_name}
+
+    else 
+      li There are no bills.

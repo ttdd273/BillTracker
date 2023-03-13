@@ -22,6 +22,7 @@ const async = require("async");
 // we will render all the bills we currently have
 exports.index = function (req, res, next) {
   Bill.find({}, "name amount userId")
+    .populate("userId")
     .exec()
     .then((list_bills) => {
       // successful, so render the list

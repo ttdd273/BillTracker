@@ -2,13 +2,12 @@ extends layout
 
 block content
   h1= title
-  //-   still need to get all the data
 
   ul
     each bill in bill_list
       li 
         a(href=bill.url) #{bill.name} 
-        | ($#{bill.amount})
+        | ($#{bill.amount}) from #{bill.userId.first_name} #{bill.userId.last_name}
 
     else 
       li There are no bills.

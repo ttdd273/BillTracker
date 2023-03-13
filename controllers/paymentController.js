@@ -1,7 +1,25 @@
 const express = require("express");
 
-exports.index = (req, res) => {
-  res.render("payment_list", { title: "Payments" });
+const Bill = require("../models/bill");
+const Payment = require("../models/payment");
+
+exports.index = function (req, res, next) {
+  Payment.find({}, "userId billId amount payment_date")
+    // in order to get all the inforamtion from the bill
+    // we need to call the populate method
+    .populate("billId")
+    .populate("userId")
+    .exec()
+    .then((list_payment) => {
+      // successful, so render the list
+      res.render("payment_list", {
+        title: "Payments",
+        payment_list: list_payment,
+      });
+    })
+    .catch((err) => {
+      return next(err);
+    });
 };
 
 exports.payment_create_get = (req, res) => {
