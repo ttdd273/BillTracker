@@ -3,6 +3,9 @@ const express = require("express");
 const Bill = require("../models/bill");
 const Payment = require("../models/payment");
 
+// importing the constant for payment method
+const { payment_methods } = require("../constants");
+
 exports.index = function (req, res, next) {
   Payment.find({}, "userId billId amount payment_date")
     // in order to get all the inforamtion from the bill
@@ -23,7 +26,10 @@ exports.index = function (req, res, next) {
 };
 
 exports.payment_create_get = (req, res) => {
-  res.render("payment_form", { title: "Create Payment" });
+  res.render("payment_form", {
+    title: "Create Payment",
+    payment_methods: payment_methods,
+  });
 };
 
 exports.payment_create_post = (req, res) => {

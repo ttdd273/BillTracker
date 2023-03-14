@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 // define schema
 const Schema = mongoose.Schema;
 
+// importing the constants
+const { bill_categories } = require("../constants");
+
 // reminders can be an array of dates of when the user wants to be reminded
 // but for now we won't include it
 
@@ -16,23 +19,7 @@ const BillSchema = new Schema({
   dueDate: { type: Date },
   category: {
     type: String,
-    enum: [
-      "Housing",
-      "Transportation",
-      "Food",
-      "Utilities",
-      "Clothing",
-      "Healthcare",
-      "Insurance",
-      "Household Supplies",
-      "Personal Spending",
-      "Debt",
-      "Retirement",
-      "Education",
-      "Savings",
-      "Gift",
-      "Entertainment",
-    ],
+    enum: bill_categories,
   },
 });
 

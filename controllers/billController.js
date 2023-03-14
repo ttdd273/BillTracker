@@ -8,6 +8,9 @@ const User = require("../models/user");
 // we need the async module to get the database data quickly
 const async = require("async");
 
+// get the globals
+const { bill_categories } = require("../constants");
+
 // Here's a good example of how to use the find function
 /**
  * const Athlete = mongoose.model("Athlete", yourSchema);
@@ -37,7 +40,10 @@ exports.index = function (req, res, next) {
 };
 
 exports.bill_create_get = (req, res) => {
-  res.render("bill_form", { title: "Create Bill" });
+  res.render("bill_form", {
+    title: "Create Bill",
+    bill_categories: bill_categories,
+  });
 };
 
 exports.bill_create_post = (req, res) => {

@@ -3,10 +3,28 @@ extends layout
 block content 
     h1 #{title}
 
+    //- because action is "", we will send data to the same URL as the current page
     form(method="POST" action="")
         div.form-group
-            label(for='name') Payment: 
-                input#name.form-control(type='text' placeholder='Hello' name='name' value=(payment===undefined ? "" : payment.name))
+            label(for='bill') Bill:
+                input#name.form-control(type='text' placeholder='Bill Name' name='bill' value=(payment===undefined ? "" : payment.bill))
+        div.form-group
+            label(for='amount') Amount: 
+                input#name.form-control(type='number' min="0" placeholder='0' name='amount' value=(payment===undefined ? "" : payment.amount))
+        div.form-group
+            label(for='amount') Payment Date: 
+                input#name.form-control(type='date' name='amount' required value=(payment===undefined ? "" : payment.payment_date))
+        div.form-group
+            label(for="payment_method") Payment Method: 
+                select#name.form-control(type='select' placeholder="Select Payment Method" required='true')
+                    option(value="" disabled selected) Select Method
+                    for method in payment_methods
+                        option(value=method) #{method}
+
+
+
+
+
         button.btn.btn-primary(type="submit") Submit
 
     if errors
