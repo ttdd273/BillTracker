@@ -8,7 +8,7 @@ block content
     //- if called from a get route, it will be empty as this is a new form
     //- if called from a post route, it will contain the value from the user
     div.form-group
-      label(for='name') Bill: 
+      label(for='name') Bill Name: 
         input#name.form-control(type='text' placeholder="Dinner, Movie, etc" name='name' value = (bill===undefined ? "" : bill.name))
     div.form-group
       label(for='amount') Amount:
