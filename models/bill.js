@@ -12,7 +12,8 @@ const { bill_categories } = require("../constants");
 // but for now we won't include it
 
 const BillSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  // we will make userId not required for now just so we can try out adding new data
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: false },
   name: { type: String, required: true, maxLength: 1000 },
   amount: { type: Number, min: [0, "Amount cannot be negative"] },
   // the ref property tells the scame which model can be assigned to this field

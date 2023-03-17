@@ -49,13 +49,34 @@ exports.bill_create_get = (req, res) => {
   });
 };
 
+const sanitize_category = (value) => {
+  if (!bill_categories.includes(value)) {
+    throw new Error(`Invalid category: ${value}`);
+  }
+  return value;
+};
+
 // the controller specifies an array of middleware functions
 // the array is passed to the router function and each method is called in order
 // the approach is necessary because each validator function is a middleware
-exports.bill_create_post = (req, res) => {
+exports.bill_create_post = [
   // validate the name field is not empty, this is a body validator
   // the escape removes any dangerous characters
-  body("name", "Bill name required").trim().isLength({ min: 1 }).escape();
+  body("name", "Bill name required").trim().isLength({ min: 1 }).escape(),
+  body("amount", "Amount required")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .isNumeric("Amount must be a number"),
+
+  // the optional function runs a subsequent validation only if a field has been entered
+  // the checkFalsy flag means we will accept either an empty string or null as empty value
+  body("dueDate", "Invalid due date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+
+  body("category").customSanitizer(sanitize_category),
 
   // we create a middleware function to extract any validation errors
   (req, res, next) => {
@@ -64,7 +85,12 @@ exports.bill_create_post = (req, res) => {
 
     // create a bill object with escaped and trimmed data
     console.log(req);
-    const bill = new Bill({ name: req.body.name });
+    const bill = new Bill({
+      name: req.body.name,
+      amount: req.body.amount,
+      dueDate: req.body.dueDate,
+      category: req.body.category,
+    });
 
     if (!errors.isEmpty()) {
       // there are errors, render the form again with sanitized error messages
@@ -96,8 +122,8 @@ exports.bill_create_post = (req, res) => {
           return next(err);
         });
     }
-  };
-};
+  },
+];
 
 exports.bill_delete_get = (req, res) => {
   res.send("bill delete get");
