@@ -49,11 +49,11 @@ exports.bill_create_get = (req, res) => {
   });
 };
 
-const sanitize_category = (value) => {
-  if (!bill_categories.includes(value)) {
-    throw new Error(`Invalid category: ${value}`);
+const sanitize_category = (category) => {
+  if (!bill_categories.includes(category)) {
+    throw new Error(`Invalid category: ${category}`);
   }
-  return value;
+  return category;
 };
 
 // the controller specifies an array of middleware functions
@@ -141,6 +141,29 @@ exports.bill_update_post = (req, res) => {
   res.send("bill update post");
 };
 
-exports.bill_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: bill detail: ${req.params.id}`);
+exports.bill_detail = (req, res, next) => {
+  // if we call next more than once in a middleware function
+  // it will often raise the error: Cannot set headers after they are sent to the client
+  // res.send(`NOT IMPLEMENTED: bill detail: ${req.params.id}`);
+
+  // rather than using async module, we will just use Promise.all to execute this
+
+  const billPromise = Bill.findById(req.params.id).populate("userId").exec();
+
+  Promise.all([billPromise])
+    .then(([bill]) => {
+      if (bill == null) {
+        const err = new Error("Bill not found");
+        err.status(404);
+        throw err;
+      } else {
+        // successful, render the main page
+        res.render("bill_detail", {
+          bill: bill,
+        });
+      }
+    })
+    .catch((err) => {
+      return next(err);
+    });
 };

@@ -6,8 +6,13 @@ block content
   ul
     each bill in bill_list
       li 
-        a(href=bill.url) #{bill.name} 
-        | ($#{bill.amount}) from #{bill.userId.first_name} #{bill.userId.last_name}
+        if bill.userId
+          a(href=bill.url) #{bill.name} 
+          | ($#{bill.amount}) #{bill.userId.first_name} #{bill.userId.last_name}
+
+        else
+          a(href=bill.url) #{bill.name} 
+          | ($#{bill.amount}) from Unknown
 
     else 
       li There are no bills.

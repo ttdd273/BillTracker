@@ -6,7 +6,8 @@ const Schema = mongoose.Schema;
 const { payment_methods } = require("../constants");
 
 const PaymentSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  // we will need to require user in a later branch
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: false },
   billId: { type: Schema.Types.ObjectId, ref: "Bill", required: true },
   amount: { type: Number, required: true, min: 0 },
   payment_date: { type: Date, required: true },

@@ -1,3 +1,23 @@
 extends layout 
 
 block content 
+    h1 Bill: #{bill.name}
+
+    if bill.userId
+        p #[strong User: ] 
+            a(href= bill.userId.url) #{bill.userId.first_name} #{bill.userId.last_name}
+    else
+        p #[strong User: ] Unknown
+
+    p #[strong Amount: ] $#{bill.amount}
+
+    p #[strong Due Date: ] #{bill.dueDate}
+
+    p #[strong Category: ] #{bill.category}
+
+    hr 
+
+    p 
+        a(href= bill.url + "/update") Update Bill
+    p 
+        a(href= bill.url + "/delete") Delete Bill
