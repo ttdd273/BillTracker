@@ -6,26 +6,37 @@ block content
     //- because action is "", we will send data to the same URL as the current page
     form(method="POST" action="")
         div.form-group
+            //- remember that because bill is another model, the value needs to be the ID
             label(for='bill') Bill:
-                select#bill.form-control(type='select' placeholder="Select Bill to Pay" required="True")
-                    option(value="" disabled selected) Select Bill to Pay
-                        for bill in bills
-                            option(value=bill.url) #{bill.name}
+            select#bill.form-control(type='select' name="bill" placeholder="Select Bill to Pay" required="True")
+                option(value="" disabled selected) Select Bill to Pay
+                    for bill in bills
+                        if payment
+                            option(value=bill._id selected=(bill._id.toString() === payment.bill._id.toString() ? 'selected' : false)) #{bill.name}
+                        else
+                            option(value=bill._id) #{bill.name}
         div.form-group
             label(for='amount') Amount: 
-                input#amount.form-control(type='number' min="0" placeholder='0' name='amount' value=(payment===undefined ? "" : payment.amount))
+            input#amount.form-control(type='number' min="0" placeholder='0' name='amount' value=(payment===undefined ? "" : payment.amount))
         div.form-group
             label(for='payment_date') Payment Date: 
-                input#payment_date.form-control(type='date' name='amount' required value=(payment===undefined ? "" : payment.payment_date))
+            input#payment_date.form-control(type='date' name='payment_date' required value=(payment===undefined ? "" : payment.payment_date))
         div.form-group
             label(for="payment_method") Payment Method: 
-                select#payment_method.form-control(type='select' placeholder="Select Payment Method" required='true')
-                    option(value="" disabled selected) Select Method
-                    for method in payment_methods
-                        option(value=method) #{method}
+            select#payment_method.form-control(type='select' name="payment_method" placeholder="Select Payment Method" required='true')
+                option(value="" disabled selected) Select Method
+                for method in payment_methods
+                    option(value=method) #{method}
 
         button.btn.btn-primary(type="submit") Submit
 
+        script.
+            function log_value() {
+                const selectElement = document.querySelector('#bill');
+                const selectedValue = selectElement.value;
+                console.log("hello");
+                console.log(selectedValue);
+            }
     if errors
         ul 
             for error in errors 

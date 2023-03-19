@@ -1,0 +1,23 @@
+extends layout 
+
+block content 
+    h1 Payment: #{payment.billId.name}
+
+    if payment.billId.userId
+        p #[strong Bill Owner: ] 
+            a(href= payment.billId.userId.url) #{payment.billId.userId.first_name} #{payment.billId.userId.last_name}
+    else
+        p #[strong Bill Owner: ] Unknown
+
+    p #[strong Amount: ] $#{payment.amount}
+
+    p #[strong Payment Date: ] #{payment.payment_date}
+
+    p #[strong Payment Method: ] #{payment.payment_method}
+
+    hr 
+
+    p 
+        a(href= payment.url + "/update") Update Payment
+    p 
+        a(href= payment.url + "/delete") Delete Payment

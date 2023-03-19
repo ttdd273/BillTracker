@@ -68,9 +68,11 @@ exports.payment_create_post = [
   // middleware function to extract validation errors
   (req, res, next) => {
     const errors = validationResult(req);
-
+    // console.log(req.body);
     const payment = new Payment({
-      billId: req.body.billId,
+      // this is really important, req.body sends information
+      // with the name on the form, not the name in the model
+      billId: req.body.bill,
       amount: req.body.amount,
       payment_date: req.body.payment_date,
       payment_method: req.body.payment_method,
@@ -123,6 +125,24 @@ exports.payment_update_post = (req, res) => {
   res.send("payment update post");
 };
 
-exports.payment_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: payment detail: ${req.params.id}`);
+exports.payment_detail = (req, res, next) => {
+  // res.send(`NOT IMPLEMENTED: payment detail: ${req.params.id}`);
+  const paymentPromise = Payment.findById(req.params.id)
+    // note that this is how you populate nested documents
+    .populate({ path: "billId", populate: { path: "userId" } })
+    .exec();
+
+  Promise.all([paymentPromise])
+    .then(([payment]) => {
+      if (payment == null) {
+        const err = new Error(`Payment not found`);
+        err.status = 404;
+        throw err;
+      } else {
+        res.render("payment_detail", { payment: payment });
+      }
+    })
+    .catch((err) => {
+      return next(err);
+    });
 };
