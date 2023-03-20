@@ -7,7 +7,11 @@ block content
     each payment in payment_list
       li 
         a(href=payment.url) Payment 
-        | of ($#{payment.amount}) for #{payment.billId.name} by #{payment.userId.first_name} #{payment.userId.last_name}
+        | of ($#{payment.amount}) for #{payment.billId.name} by 
+        if payment.userId
+          #{payment.userId.first_name} #{payment.userId.last_name}
+        else 
+          | Unknown User
 
     else 
       li There are no bills.
