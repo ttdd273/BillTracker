@@ -7,6 +7,4 @@ router.get("/", function (req, res, next) {
   res.redirect("/home");
 });
 
-// Working on user functionality
-
 module.exports = router;

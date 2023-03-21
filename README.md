@@ -80,6 +80,29 @@
    - paymentMethod (the method of payment, e.g. credit card, bank transfer, etc.)
    - receipt (a file or URL linking to the payment receipt)
 
+# User Authentication
+
+- Okay, this is something that we've never done before, so this should be interesting. Here are the steps we got from ChatGPT:
+
+1. Choose an authentication strategy: There are different authentication strategies like username/password authentication, OAuth, JWT, etc. You should choose the strategy that best fits your use case.
+
+2. Install necessary packages: Install the necessary packages for your chosen authentication strategy. For example, if you choose to use `passport.js` for authentication, you will need to install the passport and passport-local packages.
+
+3. Configure authentication: Configure the authentication strategy you have chosen. For example, if you are using `passport.js` with the local strategy, you will need to set up a passport middleware with a local strategy, where you define how to authenticate a user using a username and password.
+
+4. Create a user model: Define a user model for your web app. The user model should contain fields such as username, email, and password. You can use a database like MongoDB to store your user data.
+
+5. Create login and registration routes: Create routes for users to log in and register. These routes should handle the authentication process, and if the authentication is successful, they should redirect the user to the appropriate page.
+
+6. Create middleware for protected routes: You can create middleware to protect routes that require authentication. This middleware should check if the user is authenticated, and if not, redirect them to the login page.
+
+- Overall, setting up user authentication and login in your Express Node.js web app requires a fair amount of setup, but once you have it working, it will help to keep your users' data and your web app more secure.
+
+- So, I think the steps are pretty clear from what's explained here, but we can flush out these steps.
+
+1. I think what I want to do first is setting up the general routes. Thankfully, we already have our user model defined so that would save us some time.
+   - So, for this, I will first add the login button and redirect it to the login route.
+
 # Pages
 
 - Now that we've got all the data loaded in, we will try to list out all the bills and payments first, and possibly add the functionality to create and delete bills and payments, since these are all things already covered.

@@ -12,3 +12,12 @@ a {
   padding: 0;
   list-style: none;
 }
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1em;
+  /* flex */
+  list-style: none;
+}
