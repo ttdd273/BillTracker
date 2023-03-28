@@ -1,0 +1,22 @@
+extends layout
+
+block content 
+    h1 #{title}
+
+    //- remember action takes to the specified URL
+    form(method="POST" action="")
+    div.form-group 
+        label(for="username") User Name:
+            input#username.form-control(type='text' name='username' 
+            value = (user===undefined ? "" : user.username))
+    div.form-group 
+        label(for="password") Password: 
+            input#password.form-control(type='text' name='password'
+            value = (user===undefined ? "" : user.password))
+
+    button.btn.btn-primary(type='submit') Login
+
+    if errors 
+        ul 
+            for error in errors 
+                li!= error.msg

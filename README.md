@@ -150,18 +150,25 @@
 
 ## /home
 
-## /login
-
-## /register
-
-## /dashboard
-
-## /bills
-
-## /bills/:id
-
-## /payments
-
-## /payments/:id
-
 ## /settings
+
+## User related routes
+
+- `GET /users/signup`: A route that renders a form for users to sign up with a new account
+- `POST /users/signup`: A route that processes the form data submitted by the user to create a new account
+- `GET /users/login`: A route that renders a form for users to log in with their account credentials
+- `POST /users/login`: A route that processes the form data submitted by the user to authenticate their account
+- `POST /users/logout`: A route that logs out the currently authenticated user
+- `GET /users/:id`: A route that displays the profile information for a specific user, identified by their id parameter
+- `GET /users/:id/edit`: A route that renders a form for a user to edit their own profile information
+- `PUT /users/:id`: A route that processes the form data submitted by the user to update their own profile information
+
+## Bill related routes
+
+- `/bills`
+- `/bills/:id`
+
+## Payment related routes
+
+- `/payments`
+- `/payments/:id`
