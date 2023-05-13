@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
 
@@ -22,6 +23,16 @@ const UserSchema = new Schema({
   },
   password: { type: String, trim: true, required: [true, "Password required"] },
 });
+
+// validating passwords
+UserSchema.methods.isValidPassword = async function (password) {
+  try {
+    const match = await bcrypt.compare(password, this.password);
+    return match;
+  } catch (err) {
+    return err;
+  }
+};
 
 // will need to come back to this for user functionality
 UserSchema.virtual("url").get(function () {

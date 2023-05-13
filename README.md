@@ -12,37 +12,37 @@
 
 ## Sprint 1: Basic Functionality
 
-    - Set up the project and create a basic layout
-    - Create a user registration and login system
-    - Allow users to add, edit, and delete bills
-    - Allow users to view a list of their bills
+- Set up the project and create a basic layout
+- Create a user registration and login system
+- Allow users to add, edit, and delete bills
+- Allow users to view a list of their bills
 
 ## Sprint 2: Payment Tracking
 
-    - Allow users to add, edit, and delete payments
-    - Create a page to track payments for each bill
-    - Allow users to view a list of their payments
+- Allow users to add, edit, and delete payments
+- Create a page to track payments for each bill
+- Allow users to view a list of their payments
 
 ## Sprint 3: Advanced Functionality
 
-    - Allow users to set reminders for bill due dates
-    - Create a dashboard to display a summary of bills and payments
-    - Add functionality to sort and filter bills and payments
-    - Allow users to upload and store receipts for payments
+- Allow users to set reminders for bill due dates
+- Create a dashboard to display a summary of bills and payments
+- Add functionality to sort and filter bills and payments
+- Allow users to upload and store receipts for payments
 
 ## Sprint 4: User Experience Improvements
 
-    - Implement a responsive design for mobile devices
-    - Add error handling and form validation
-    - Implement password reset functionality
-    - Improve the UI/UX design to enhance user experience
+- Implement a responsive design for mobile devices
+- Add error handling and form validation
+- Implement password reset functionality
+- Improve the UI/UX design to enhance user experience
 
 ## Sprint 5: Additional Features
 
-    - Implement an analytics dashboard to display insights and trends
-    - Allow users to share bill and payment information with others
-    - Add support for multiple currencies and languages
-    - Implement a budgeting feature to track spending and saving goals
+- Implement an analytics dashboard to display insights and trends
+- Allow users to share bill and payment information with others
+- Add support for multiple currencies and languages
+- Implement a budgeting feature to track spending and saving goals
 
 # Models
 
@@ -100,8 +100,113 @@
 
 - So, I think the steps are pretty clear from what's explained here, but we can flush out these steps.
 
-1. I think what I want to do first is setting up the general routes. Thankfully, we already have our user model defined so that would save us some time.
-   - So, for this, I will first add the login button and redirect it to the login route.
+## Step 1.
+
+I think what I want to do first is setting up the general routes. Thankfully, we already have our user model defined so that would save us some time.
+
+- So, for this, I will first add the login button and redirect it to the login route.
+
+## Step 2.
+
+Now, we need to setup a login page, where users can enter their credentials and once the user logs on, I can create a token or a session cookie to identify the user and store it on the client-side.
+
+- Then, we'll need to protect our routes so that only authenticated users can access them.
+- This can be done by checking if the user has a valid token or session cookie before allowing them to access the protected route.
+
+1. We will use passport to do this:
+
+```
+npm install passport passport-local passport-jwt
+```
+
+- Note that passport operates on the concept of strategies.
+- Strategies can range from verifying username and password credentials, delegated authentication using OAuth (for example, via Facebook or Twitter), or federated authentication using OpenID.
+
+- Before authenticating requests, the strategy (or strategies) used by an application must be configured.
+
+- And:
+
+  - `passport` is a Node.js middleware that provides an authentication framework.
+  - `passport-local` is a strategy for Passport that allows users to authenticate using a username and password. It's a common way to handle login authentication for web applications.
+  - `passport-jwt` is another strategy for Passport that allows users to authenticate using JSON Web Tokens (JWT). JWT is a token-based authentication mechanism that is often used in RESTful APIs. It allows for stateless authentication where the server does not need to keep track of user sessions.
+
+- By installing both passport-local and passport-jwt, you can use both username/password and JWT authentication in your application, depending on your needs. For example, you might use JWT authentication for APIs and username/password authentication for web logins.
+
+1. The rest of the configuration can be found in `app.js`, the login route, and the middleware that verifies the token.
+
+```
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+
+// configure passport to use a local strategy for authentication
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, async (email, password, done) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        const isMatch = await user.isValidPassword(password);
+        if (!isMatch) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        return done(null, user);
+    } catch (error) {
+        return done(error);
+    }
+}));
+
+// configure passport to use a JWT strategy for authentication
+passport.use(new JwtStrategy({
+    secretOrKey: 'your_secret_key',
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+}, async (payload, done) => {
+    try {
+        const user = await User.findById(payload.sub);
+        if (!user) {
+            return done(null, false);
+        }
+
+        return done(null, user);
+    } catch (error) {
+        return done(error);
+    }
+}));
+```
+
+3. Login route
+
+```
+app.post('/login', passport.authenticate('local', { session: false }), async (req, res) => {
+    const token = jwt.sign({ sub: req.user._id }, 'your_secret_key');
+    res.json({ token });
+});
+```
+
+4. Protect your routes by adding a middleware that verifies the token:
+
+```
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+app.get('/protected-route', jwtAuth, (req, res) => {
+    res.json({ message: 'This is a protected route' });
+});
+```
+
+5. Note that in the process, we also realized we need a hashing function in our User mdoel that's able to tell whether or not our password is valid for the User, and in order to do that, we will need another package to decrypt and encrypt the password after hashing.
+
+- Hashing and salting passwords:
+  - Salting is the practice of adding a unique, randomly generated string of characters to a password before it is hashed.
+  - The salt value is combined with the password and then hashed to create a unique hash value for each password.
+  - Salting helps protect against pre-computed attacks where attackers can generate hash values for common passwords ahead of time and then quickly compare them to a stolen hash to find a match.
+  - With salt added, each password has a unique hash value, even if the original passwords are the same.
+  - Salting can significantly increase the complexity and time required for attackers to crack passwords.
 
 # Pages
 

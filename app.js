@@ -9,6 +9,14 @@ var usersRouter = require("./routes/users");
 var billsRouter = require("./routes/bills");
 var paymentsRouter = require("./routes/payments");
 
+// Authentication related
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+
+const User = require("./models/user");
+
 var app = express();
 
 // get the dot environment file
@@ -43,6 +51,38 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/bills", billsRouter);
 app.use("/payments", paymentsRouter);
+
+// configure passport to use a local strategy for authentication
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          // done is a callback function passed to the authentication strategy
+          // takes three arguments, error, user object if success, optional msg
+          return done(null, false, { message: "Invalid email or password" });
+        }
+
+        // isVaildPassword should be a function defined on User model
+        // and returns a boolean
+        const isMatch = await user.isValidPassword(password);
+
+        if (!isMatch) {
+          return done(null, false, { message: "Invalid email or password" });
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,0 +1,31 @@
+extends layout
+
+block content 
+    h1 #{title}
+
+    //- remember action takes to the specified URL
+    form(method="POST" action="")
+        //- note that the form will not submit if the divs are not indented
+        div.form-group 
+            label(for="first_name") First Name:
+                input#first_name.form-control(type='text' name='first_name' 
+                value = (user===undefined ? "" : user.first_name) required="true")
+        div.form-group 
+            label(for="last_name") Last Name: 
+                input#last_name.form-control(type='text' name="last_name"
+                value = (user===undefined ? "" : user.last_name) required="true")
+        div.form-group
+            label(for="email") Email: 
+                input#email.form-control(type='text' name='email'
+                value = (user===undefined ? "" : user.email) required="true")
+        div.form-group 
+            label(for="password") Password: 
+                input#password.form-control(type='text' name='password'
+                value = (user===undefined ? "" : user.password) required="true")
+        //- also note that the button has to be indented as well for it to work
+        button.btn.btn-primary(type='submit') Create Account
+
+    if errors 
+        ul 
+            for error in errors 
+                li!= error.msg

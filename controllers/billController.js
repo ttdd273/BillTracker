@@ -84,7 +84,6 @@ exports.bill_create_post = [
     const errors = validationResult(req);
 
     // create a bill object with escaped and trimmed data
-    console.log(req);
     const bill = new Bill({
       name: req.body.name,
       amount: req.body.amount,
