@@ -1,7 +1,9 @@
 const express = require("express");
 const User = require("../models/user");
 
-const { body, validateResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
+
+const bcrypt = require("bcrypt");
 
 exports.user_signup_get = (req, res, next) => {
   res.render("signup", {
@@ -16,11 +18,16 @@ exports.user_signup_post = [
     .isLength({ min: 1 })
     .escape(),
   body("last_name", "Last name required").trim().isLength({ min: 1 }).escape(),
-  body("email", "Email required").trim().isLength({ min: 1 }).escape(),
+  // validating email using express-validator
+  body("email", "Email required")
+    .trim()
+    .isEmail()
+    .withMessage("Invalid email format")
+    .normalizeEmail(),
   body("password", "Password required").trim().isLength({ min: 1 }).escape(),
 
   (req, res, next) => {
-    const errors = validateResult(req);
+    const errors = validationResult(req);
 
     // create a new user with a salted password
     const user = new User({
@@ -40,6 +47,45 @@ exports.user_signup_post = [
       return;
     } else {
       // data form is valid, let's save it to the database
+      User.findOne({ email: user.email })
+        .exec()
+        .then((existingUser) => {
+          if (existingUser) {
+            // User already exists, render the form again with an error message
+            res.render("signup", {
+              title: "Register",
+              user: user,
+              error: "User already exists",
+            });
+            return;
+          } else {
+            // otherwise, we're good to save the user
+
+            bcrypt
+              .hash(user.password, 10)
+              .then((hashedPassword) => {
+                user.password = hashedPassword;
+
+                user
+                  .save()
+                  .then(() => {
+                    res.redirect(user.url);
+                  })
+                  .catch((err) => {
+                    return next(err);
+                  });
+              })
+              .catch((err) => {
+                return next(err);
+              });
+          }
+        })
+        .catch((err) => {
+          // Handle any errors that occurred during the process
+          // console.error("Error finding user:", err);
+          // return res.status(500).json({ error: "Server error" });
+          return next(err);
+        });
     }
   },
 ];
@@ -65,7 +111,20 @@ exports.user_logout_post = function (req, res, next) {
 };
 
 exports.user_profile_get = function (req, res, next) {
-  res.send("users profile get not implemented");
+  const userPromise = User.findById(req.params.id).exec();
+
+  Promise.all([userPromise]).then(([user]) => {
+    if (user == null) {
+      const err = new Error("User not found");
+      err.status(404);
+      throw err;
+    } else {
+      // successful, render the main page
+      res.render("user_detail", {
+        user: user,
+      });
+    }
+  });
 };
 
 exports.user_profile_edit_get = function (req, res, next) {

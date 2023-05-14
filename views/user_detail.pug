@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+    h1 Account Information:
+
+    p #[strong First Name: ] $#{user.first_name}
+
+    p #[strong Last Name: ] #{user.last_name}
+
+    p #[strong Email: ] #{user.email}
+
+    p #[strong Password: ] #{user.password}
+
+    hr 
+
+    p 
+        a(href= user.url + "/update") Update Information

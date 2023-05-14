@@ -36,7 +36,7 @@ UserSchema.methods.isValidPassword = async function (password) {
 
 // will need to come back to this for user functionality
 UserSchema.virtual("url").get(function () {
-  return `/${this._id}`;
+  return `/users/${this._id}`;
 });
 
 module.exports = mongoose.model("User", UserSchema);
