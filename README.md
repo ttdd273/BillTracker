@@ -208,6 +208,21 @@ app.get('/protected-route', jwtAuth, (req, res) => {
   - With salt added, each password has a unique hash value, even if the original passwords are the same.
   - Salting can significantly increase the complexity and time required for attackers to crack passwords.
 
+## Step 3.
+
+Now we want to handle authentication, this doesn't really match up with our steps from before, but this is somewhat still in order.
+
+Here's the general process we're following:
+
+- Retrieve the email and password from the request body.
+- Find the user in the database based on the provided email.
+- Compare the entered password with the stored password (using bcrypt or another password hashing library).
+- If the authentication is successful, you can create a session or issue a JWT token for the user to maintain their authenticated state.
+
+As you can see, I think the hardest or rather the most unfamiliar step will be the last step, but I think it will be an interesting thing to try out.
+
+I see, so for authentication, and in general, it is the norm to put your middleware functions in a middleware folder, so you can acccess them relatively easily. So I will do that with the authentication middleware and put it in `auth.js`.
+
 # Pages
 
 - Now that we've got all the data loaded in, we will try to list out all the bills and payments first, and possibly add the functionality to create and delete bills and payments, since these are all things already covered.

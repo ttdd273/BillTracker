@@ -144,7 +144,6 @@ exports.bill_detail = (req, res, next) => {
   // if we call next more than once in a middleware function
   // it will often raise the error: Cannot set headers after they are sent to the client
   // res.send(`NOT IMPLEMENTED: bill detail: ${req.params.id}`);
-
   // rather than using async module, we will just use Promise.all to execute this
 
   const billPromise = Bill.findById(req.params.id).populate("userId").exec();

@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+// Routers
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var billsRouter = require("./routes/bills");
@@ -14,6 +15,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+
+// Middleware
+const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
+const authenticateUser = require("./middleware/auth");
 
 const User = require("./models/user");
 
@@ -48,9 +54,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/bills", billsRouter);
-app.use("/payments", paymentsRouter);
+app.use("/users", authenticateUser, usersRouter);
+app.use("/bills", authenticateUser, billsRouter);
+app.use("/payments", authenticateUser, paymentsRouter);
 
 // configure passport to use a local strategy for authentication
 passport.use(
@@ -85,19 +91,9 @@ passport.use(
 );
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+app.use(notFoundMiddleware);
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
+app.use(errorHandlerMiddleware);
 
 module.exports = app;

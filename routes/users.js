@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const user_controller = require("../controllers/userController");
 
+/* GET All Users */
+router.get("/", user_controller.all_users_get);
+
 /* GET User Signup */
 router.get("/signup", user_controller.user_signup_get);
 
