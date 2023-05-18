@@ -223,6 +223,8 @@ As you can see, I think the hardest or rather the most unfamiliar step will be t
 
 I see, so for authentication, and in general, it is the norm to put your middleware functions in a middleware folder, so you can acccess them relatively easily. So I will do that with the authentication middleware and put it in `auth.js`.
 
+With authentication, one error we ran into is that `req.isAuthenticated` is not a function. This has to do with the config for `passport` and we have to make sure we set it up correctly.
+
 # Pages
 
 - Now that we've got all the data loaded in, we will try to list out all the bills and payments first, and possibly add the functionality to create and delete bills and payments, since these are all things already covered.
